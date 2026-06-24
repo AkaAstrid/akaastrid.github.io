@@ -1,0 +1,175 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Personal Portfolio of Nathanial Story">
+    <title>Nathanial Story - Portfolio</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        header {
+            background: #35424a;
+            color: #ffffff;
+            padding: 1rem 0;
+            text-align: center;
+        }
+        nav {
+            background: #e8491d;
+            color: #ffffff;
+            padding: 0.5rem;
+            text-align: center;
+        }
+        nav a {
+            color: #ffffff;
+            text-decoration: none;
+            padding: 0 15px;
+            font-weight: bold;
+        }
+        section {
+            padding: 2rem;
+            margin: 1rem auto;
+            max-width: 800px;
+            background: #ffffff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .project-gallery {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .project-gallery img {
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            transition: transform 0.2s;
+        }
+        .project-gallery img:hover {
+            transform: scale(1.05);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            display: inline-block;
+            background: #35424a;
+            color: #ffffff;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        button:hover {
+            background: #e8491d;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1 id="welcome-message">Loading...</h1>
+    </header>
+
+    <nav>
+        <a href="#about">About</a>
+        <a href="#projects">Projects</a>
+        <a href="#contact">Contact</a>
+    </nav>
+
+    <main> //header and about me
+        <section id="about">
+            <h2>About Me</h2>
+            <p>
+                Hello! I'm Nathanial story, im from franklin virginia and i love programming and gaming, i have been in school for a bout a year or two now 
+            </p>
+            <p>
+                ive had a passion for programming things since elementry school, i think coding is a great way to express your creativity and solve problems. I enjoy learning new programming languages and frameworks, and I'm always looking for opportunities to improve my skills.
+            </p>
+        </section>
+
+        <section id="projects"> //projects section
+            <h2>My Projects</h2>
+            <p>Here are a few of the GitHub projects I have been working on recently:</p>
+            
+            <div class="project-gallery">
+                <a href="https://github.com/AstridStory/Main-Street-Hardware-DB" target="_blank" title="Main Street Hardware Database">
+                    <img src="https://via.placeholder.com/200?text=SQL+Database" alt="Main Street Hardware SQL Database ER Diagram">
+                </a>
+
+                </a>
+            </div>
+        </section>
+
+        <section id="contact"> //contact form
+            <h2>Contact Me</h2>
+            <p>feel free to reach out</p>
+            
+            <form action="#" method="POST">
+                <div class="form-group">
+                    <label for="sender-name">Name:</label>
+                    <input type="text" id="sender-name" name="sender-name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email-address">Email Address:</label>
+                    <input type="email" id="email-address" name="email-address" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="subject">Subject:</label>
+                    <input type="text" id="subject" name="subject" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="message">Message:</label>
+                    <textarea id="message" name="message" rows="5" required></textarea>
+                </div>
+                
+                <button type="submit">Submit Message</button>
+            </form>
+        </section>
+    </main>
+
+    <script> // script to prompt user for name and update welcome message
+        // Wait for the HTML document to fully load before running the script
+        document.addEventListener('DOMContentLoaded', () => {
+            // Prompt the user for their name
+            let visitorName = prompt("Welcome! Please enter your name:");
+            
+            // Grab the H1 element
+            let welcomeElement = document.getElementById("welcome-message");
+            
+            // Check if the user entered a name or clicked cancel
+            if (visitorName && visitorName.trim() !== "") {
+                // Dynamically update the header with their name
+                welcomeElement.textContent = `Welcome to my portfolio, ${visitorName}!`;
+            } else {
+                // Fallback message if they didn't provide a name
+                welcomeElement.textContent = "Welcome to Nathanial's Portfolio!";
+            }
+        });
+    </script>
+
+</body>
+</html>
+
+```
