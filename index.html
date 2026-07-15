@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,6 +6,7 @@
     <meta name="description" content="Personal Portfolio of Nathanial Story">
     <title>Nathanial Story - Portfolio</title>
     <style>
+        /* Base Styles */
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
@@ -14,13 +14,28 @@
             padding: 0;
             background-color: #f4f4f4;
             color: #333;
+            /* Smooth transition for dark mode */
+            transition: background-color 0.3s, color 0.3s; 
         }
         header {
             background: #35424a;
             color: #ffffff;
             padding: 1rem 0;
             text-align: center;
+            position: relative;
         }
+        
+        /* Dark Mode Toggle Styling */
+        .theme-switch {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
         nav {
             background: #e8491d;
             color: #ffffff;
@@ -40,7 +55,31 @@
             background: #ffffff;
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: background-color 0.3s, color 0.3s;
         }
+        
+        /* Featured Content Styling */
+        .featured-content-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .featured-box {
+            border: 2px dashed #ccc;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+           
+        }
+        .featured-box h3 {
+            margin-top: 0;
+            color: #e8491d;
+        }
+        .featured-box a {
+            color: #35424a;
+            font-weight: bold;
+        }
+
         .project-gallery {
             display: flex;
             gap: 20px;
@@ -81,49 +120,108 @@
         button:hover {
             background: #e8491d;
         }
+
+        /* --- DARK MODE CLASSES --- */
+        body.dark-mode {
+            background-color: #1a1a1a;
+            color: #f4f4f4;
+        }
+        body.dark-mode section {
+            background: #2d2d2d;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+        }
+        body.dark-mode .featured-box {
+            background-color: #333;
+            border-color: #666;
+        }
+        body.dark-mode .featured-box a {
+            color: #4da6ff;
+        }
+        body.dark-mode .form-group input, 
+        body.dark-mode .form-group textarea {
+            background-color: #444;
+            color: #fff;
+            border: 1px solid #666;
+        }
     </style>
 </head>
 <body>
 
     <header>
+        <!-- Dark Mode Slider/Checkbox -->
+        <div class="theme-switch">
+            <label for="dark-mode-slider">Dark Mode</label>
+            <input type="checkbox" id="dark-mode-slider">
+        </div>
         <h1 id="welcome-message">Loading...</h1>
     </header>
 
     <nav>
         <a href="#about">About</a>
+        <a href="#featured">Featured</a>
         <a href="#projects">Projects</a>
         <a href="#contact">Contact</a>
     </nav>
 
-    <main> //header and about me
+    <main> 
+        <!-- About Section -->
         <section id="about">
             <h2>About Me</h2>
             <p>
-                Hello! I'm Nathanial story, im from franklin virginia and i love programming and gaming, i have been in school for a bout a year or two now 
+                Hello! I'm Nathanial Story, I'm from Franklin, Virginia and I love programming and gaming. I have been in school for about a year or two now. 
             </p>
             <p>
-                ive had a passion for programming things since elementry school, i think coding is a great way to express your creativity and solve problems. I enjoy learning new programming languages and frameworks, and I'm always looking for opportunities to improve my skills.
+                I've had a passion for programming things since elementary school, I think coding is a great way to express your creativity and solve problems. I enjoy learning new programming languages and frameworks, and I'm always looking for opportunities to improve my skills.
             </p>
+            
+            <h3>My Skills:</h3>
+            <!-- Empty list to be populated by the JavaScript Loop -->
+            <ul id="skills-list"></ul>
         </section>
 
-        <section id="projects"> //projects section
+        <!-- New Featured Content Section -->
+        <section id="featured">
+            <h2>Featured Content</h2>
+            <div class="featured-content-container">
+                <!-- University Resources Div -->
+                <div id="uni-resources" class="featured-box">
+                    <h3>University Resources</h3>
+                    <ul>
+                        <li><a href="https://www.ecpi.edu/" target="_blank">ECPI University Home</a></li>
+                        <li><a href="https://www.ecpi.edu/programs/software-development-bachelor-degree" target="_blank">Software Development Program</a></li>
+                    </ul>
+                </div>
+
+                <!-- Personal Projects Div -->
+                <div id="personal-projects" class="featured-box">
+                    <h3>Personal Projects</h3>
+                    <p>Check out my GitHub for more custom work:</p>
+                    <a href="https://github.com/NathanialStory" target="_blank">
+                        <img src="https://via.placeholder.com/200x80?text=GitHub+Profile" alt="GitHub Profile Link">
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects"> 
             <h2>My Projects</h2>
             <p>Here are a few of the GitHub projects I have been working on recently:</p>
             
             <div class="project-gallery">
-                <a href="https://github.com/AstridStory/Main-Street-Hardware-DB" target="_blank" title="Main Street Hardware Database">
+                <a href="https://github.com/NathanialStory/Main-Street-Hardware-DB" target="_blank" title="Main Street Hardware Database">
                     <img src="https://via.placeholder.com/200?text=SQL+Database" alt="Main Street Hardware SQL Database ER Diagram">
                 </a>
-
-                </a>
+                <!-- Add more project <a> tags here to test the if/else logic -->
             </div>
         </section>
 
-        <section id="contact"> //contact form
+        <!-- Contact Section -->
+        <section id="contact"> 
             <h2>Contact Me</h2>
-            <p>feel free to reach out</p>
+            <p>Feel free to reach out!</p>
             
-            <form action="#" method="POST">
+            <form id="portfolio-form" action="#" method="POST">
                 <div class="form-group">
                     <label for="sender-name">Name:</label>
                     <input type="text" id="sender-name" name="sender-name" required>
@@ -144,32 +242,66 @@
                     <textarea id="message" name="message" rows="5" required></textarea>
                 </div>
                 
-                <button type="submit">Submit Message</button>
+                <button type="button" id="submit-btn">Submit Message</button>
             </form>
         </section>
     </main>
 
-    <script> // script to prompt user for name and update welcome message
-        // Wait for the HTML document to fully load before running the script
-        document.addEventListener('DOMContentLoaded', () => {
-            // Prompt the user for their name
-            let visitorName = prompt("Welcome! Please enter your name:");
+        <script> 
+                document.addEventListener('DOMContentLoaded', () => {
             
-            // Grab the H1 element
-            let welcomeElement = document.getElementById("welcome-message");
+            // 1. Loop to display skills FIRST
+            const mySkills = ["HTML", "CSS", "JavaScript", "C#", "SQL", "Git"];
+            const skillsListElement = document.getElementById('skills-list');
             
-            // Check if the user entered a name or clicked cancel
-            if (visitorName && visitorName.trim() !== "") {
-                // Dynamically update the header with their name
-                welcomeElement.textContent = `Welcome to my portfolio, ${visitorName}!`;
+            mySkills.forEach(skill => {
+                let li = document.createElement('li');
+                li.textContent = skill;
+                skillsListElement.appendChild(li);
+            });
+
+            // 2. Featured Content Logic 
+            const projectLinks = document.querySelectorAll('.project-gallery a');
+            const uniDiv = document.getElementById('uni-resources');
+            const personalDiv = document.getElementById('personal-projects');
+
+            if (projectLinks.length < 3) {
+                uniDiv.style.display = 'block';
+                personalDiv.style.display = 'block';
             } else {
-                // Fallback message if they didn't provide a name
-                welcomeElement.textContent = "Welcome to Nathanial's Portfolio!";
+                uniDiv.style.display = 'none';
+                personalDiv.style.display = 'block';
             }
+
+            // 3. Dark Mode Slider
+            const darkSlider = document.getElementById('dark-mode-slider');
+            darkSlider.addEventListener('change', () => {
+                document.body.classList.toggle('dark-mode');
+            });
+
+            // 4. Interactivity for Form Submit Button
+            const submitButton = document.getElementById('submit-btn');
+            submitButton.addEventListener('click', (event) => {
+                event.preventDefault();
+                const nameInput = document.getElementById('sender-name').value;
+                const nameToAlert = nameInput.trim() !== "" ? nameInput : "Guest";
+                alert(`Thank you, ${nameToAlert}, your message has been sent!`);
+                document.getElementById('portfolio-form').reset();
+            });
+
+            // 5. Prompt user for name LAST (with a tiny delay so the page renders first)
+            setTimeout(() => {
+                let visitorName = prompt("Welcome! Please enter your name:");
+                let welcomeElement = document.getElementById("welcome-message");
+                
+                if (visitorName && visitorName.trim() !== "") {
+                    welcomeElement.textContent = `Welcome to my portfolio, ${visitorName.trim()}!`;
+                } else {
+                    welcomeElement.textContent = "Welcome to Nathanial's Portfolio!";
+                }
+            }, 100); // 100 milliseconds delay
+
         });
     </script>
-
 </body>
 </html>
-
-```
