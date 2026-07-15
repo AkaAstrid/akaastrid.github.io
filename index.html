@@ -55,7 +55,7 @@
             background: #ffffff;
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            transition: background-color 0.3s, color 0.3s;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
         }
         
         /* Featured Content Styling */
@@ -69,7 +69,6 @@
             padding: 15px;
             border-radius: 5px;
             background-color: #f9f9f9;
-           
         }
         .featured-box h3 {
             margin-top: 0;
@@ -116,9 +115,13 @@
             border: none;
             cursor: pointer;
             border-radius: 4px;
+            transition: opacity 0.3s;
         }
-        button:hover {
+        button:hover:not(:disabled) {
             background: #e8491d;
+        }
+        button:disabled {
+            cursor: not-allowed;
         }
 
         /* --- DARK MODE CLASSES --- */
@@ -179,7 +182,7 @@
             <ul id="skills-list"></ul>
         </section>
 
-        <!-- New Featured Content Section -->
+        <!-- Featured Content Section -->
         <section id="featured">
             <h2>Featured Content</h2>
             <div class="featured-content-container">
@@ -212,7 +215,6 @@
                 <a href="https://github.com/NathanialStory/Main-Street-Hardware-DB" target="_blank" title="Main Street Hardware Database">
                     <img src="https://via.placeholder.com/200?text=SQL+Database" alt="Main Street Hardware SQL Database ER Diagram">
                 </a>
-                <!-- Add more project <a> tags here to test the if/else logic -->
             </div>
         </section>
 
@@ -247,10 +249,10 @@
         </section>
     </main>
 
-        <script> 
-                document.addEventListener('DOMContentLoaded', () => {
+    <script> 
+        document.addEventListener('DOMContentLoaded', () => {
             
-            // 1. Loop to display skills FIRST
+            // --- 1. Loop to display skills ---
             const mySkills = ["HTML", "CSS", "JavaScript", "C#", "SQL", "Git"];
             const skillsListElement = document.getElementById('skills-list');
             
@@ -260,7 +262,7 @@
                 skillsListElement.appendChild(li);
             });
 
-            // 2. Featured Content Logic 
+            // --- 2. Featured Content Logic ---
             const projectLinks = document.querySelectorAll('.project-gallery a');
             const uniDiv = document.getElementById('uni-resources');
             const personalDiv = document.getElementById('personal-projects');
@@ -273,23 +275,94 @@
                 personalDiv.style.display = 'block';
             }
 
-            // 3. Dark Mode Slider
+            // --- 3. Dark Mode Slider ---
             const darkSlider = document.getElementById('dark-mode-slider');
             darkSlider.addEventListener('change', () => {
                 document.body.classList.toggle('dark-mode');
             });
 
-            // 4. Interactivity for Form Submit Button
+            // --- 4. Modify Existing Elements ---
+            const aboutHeading = document.querySelector('#about h2');
+            aboutHeading.textContent = "About Me & My Journey";
+            aboutHeading.style.color = "#e8491d";
+
+            const projectsSection = document.getElementById('projects');
+            projectsSection.style.borderLeft = "5px solid #e8491d";
+
+            // --- NEW: Dynamic Paragraph Creation ---
+            // Create a new paragraph matching the image provided
+            const newProjectIntro = document.createElement('p');
+            newProjectIntro.textContent = "new projects in the works";
+            newProjectIntro.style.fontWeight = "bold";
+            newProjectIntro.style.backgroundColor = "#e8491d";
+            newProjectIntro.style.color = "#fff";
+            newProjectIntro.style.padding = "10px";
+            newProjectIntro.style.borderRadius = "4px";
+            newProjectIntro.style.marginTop = "20px";
+
+            // Append it to the bottom of the "Projects" section
+            projectsSection.appendChild(newProjectIntro);
+
+            // --- 5. Dynamic Element Creation (Notification Banner) ---
+            setTimeout(() => {
+                const notification = document.createElement('div');
+                notification.textContent = "👋 Thanks for checking out my portfolio! New projects added recently.";
+                notification.style.backgroundColor = "#e8491d";
+                notification.style.color = "#fff";
+                notification.style.textAlign = "center";
+                notification.style.padding = "10px";
+                notification.style.fontWeight = "bold";
+                
+                document.body.prepend(notification);
+                
+                setTimeout(() => {
+                    notification.remove();
+                }, 5000);
+            }, 1500);
+
+            // --- 6. Timed Form Confirmation ---
             const submitButton = document.getElementById('submit-btn');
+            const contactForm = document.getElementById('portfolio-form');
+            
+            const formStatusMsg = document.createElement('p');
+            formStatusMsg.style.fontWeight = "bold";
+            formStatusMsg.style.marginTop = "15px";
+            contactForm.appendChild(formStatusMsg); 
+
             submitButton.addEventListener('click', (event) => {
-                event.preventDefault();
+                // Ensure form validation passes before running custom logic
+                if(!contactForm.checkValidity()) {
+                    contactForm.reportValidity();
+                    return;
+                }
+                
+                event.preventDefault(); 
+                
                 const nameInput = document.getElementById('sender-name').value;
-                const nameToAlert = nameInput.trim() !== "" ? nameInput : "Guest";
-                alert(`Thank you, ${nameToAlert}, your message has been sent!`);
-                document.getElementById('portfolio-form').reset();
+                const nameToConfirm = nameInput.trim() !== "" ? nameInput : "Guest";
+
+                formStatusMsg.textContent = "Sending message... ⏳";
+                formStatusMsg.style.color = "#35424a";
+                
+                submitButton.disabled = true;
+                submitButton.style.opacity = "0.5";
+
+                setTimeout(() => {
+                    formStatusMsg.textContent = `Message sent successfully, ${nameToConfirm}! ✅`;
+                    formStatusMsg.style.color = "green";
+                    
+                    contactForm.reset();
+                    submitButton.disabled = false;
+                    submitButton.style.opacity = "1";
+
+                    setTimeout(() => {
+                        formStatusMsg.textContent = "";
+                    }, 4000);
+
+                }, 2500);
             });
 
-            // 5. Prompt user for name LAST (with a tiny delay so the page renders first)
+            // --- 7. Prompt for Name (Delayed) ---
             setTimeout(() => {
                 let visitorName = prompt("Welcome! Please enter your name:");
                 let welcomeElement = document.getElementById("welcome-message");
@@ -299,9 +372,10 @@
                 } else {
                     welcomeElement.textContent = "Welcome to Nathanial's Portfolio!";
                 }
-            }, 100); // 100 milliseconds delay
+            }, 100);
 
         });
     </script>
+
 </body>
 </html>
