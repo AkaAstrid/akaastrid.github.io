@@ -115,13 +115,79 @@
             border: none;
             cursor: pointer;
             border-radius: 4px;
-            transition: opacity 0.3s;
+            transition: opacity 0.3s, background-color 0.3s;
         }
         button:hover:not(:disabled) {
             background: #e8491d;
         }
         button:disabled {
             cursor: not-allowed;
+        }
+
+        /* --- TOOLTIP STYLING --- */
+        .tooltip-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+        .tooltip-text {
+            visibility: hidden;
+            width: max-content;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 4px;
+            padding: 6px 12px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%; 
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.85rem;
+            pointer-events: none;
+        }
+        /* Tooltip Arrow */
+        .tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #333 transparent transparent transparent;
+        }
+        .tooltip-wrapper:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* --- MODAL STYLING --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6); /* Slight transparency */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        .modal-content {
+            background: #ffffff;
+            padding: 30px 40px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            max-width: 400px;
+        }
+        .modal-content p {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            font-weight: bold;
         }
 
         /* --- DARK MODE CLASSES --- */
@@ -146,9 +212,27 @@
             color: #fff;
             border: 1px solid #666;
         }
+        body.dark-mode .modal-content {
+            background: #2d2d2d;
+            color: #f4f4f4;
+        }
+        body.dark-mode .tooltip-text {
+            background-color: #555;
+        }
+        body.dark-mode .tooltip-text::after {
+            border-color: #555 transparent transparent transparent;
+        }
     </style>
 </head>
 <body>
+
+    <!-- Welcome Modal -->
+    <div id="welcome-modal" class="modal-overlay">
+        <div class="modal-content">
+            <p>This page is a work in progress.</p>
+            <button id="close-modal-btn">Close</button>
+        </div>
+    </div>
 
     <header>
         <!-- Dark Mode Slider/Checkbox -->
@@ -156,7 +240,7 @@
             <label for="dark-mode-slider">Dark Mode</label>
             <input type="checkbox" id="dark-mode-slider">
         </div>
-        <h1 id="welcome-message">Loading...</h1>
+        <h1 id="welcome-message">Welcome to Nathanial's Portfolio!</h1>
     </header>
 
     <nav>
@@ -244,7 +328,11 @@
                     <textarea id="message" name="message" rows="5" required></textarea>
                 </div>
                 
-                <button type="button" id="submit-btn">Submit Message</button>
+                <!-- Tooltip Wrapper added here -->
+                <div class="tooltip-wrapper">
+                    <button type="button" id="submit-btn" title="Click to send your message!">Submit Message</button>
+                    <span class="tooltip-text">Click to send your message!</span>
+                </div>
             </form>
         </section>
     </main>
@@ -275,10 +363,23 @@
                 personalDiv.style.display = 'block';
             }
 
-            // --- 3. Dark Mode Slider ---
+            // --- 3. Dark Mode Slider w/ LocalStorage Persistence ---
             const darkSlider = document.getElementById('dark-mode-slider');
+            
+            // Check for stored preference on load
+            if (localStorage.getItem('darkMode') === 'enabled') {
+                document.body.classList.add('dark-mode');
+                darkSlider.checked = true;
+            }
+
             darkSlider.addEventListener('change', () => {
-                document.body.classList.toggle('dark-mode');
+                if (darkSlider.checked) {
+                    document.body.classList.add('dark-mode');
+                    localStorage.setItem('darkMode', 'enabled');
+                } else {
+                    document.body.classList.remove('dark-mode');
+                    localStorage.setItem('darkMode', 'disabled');
+                }
             });
 
             // --- 4. Modify Existing Elements ---
@@ -289,8 +390,7 @@
             const projectsSection = document.getElementById('projects');
             projectsSection.style.borderLeft = "5px solid #e8491d";
 
-            // --- NEW: Dynamic Paragraph Creation ---
-            // Create a new paragraph matching the image provided
+            // Dynamic Paragraph Creation
             const newProjectIntro = document.createElement('p');
             newProjectIntro.textContent = "new projects in the works";
             newProjectIntro.style.fontWeight = "bold";
@@ -299,8 +399,6 @@
             newProjectIntro.style.padding = "10px";
             newProjectIntro.style.borderRadius = "4px";
             newProjectIntro.style.marginTop = "20px";
-
-            // Append it to the bottom of the "Projects" section
             projectsSection.appendChild(newProjectIntro);
 
             // --- 5. Dynamic Element Creation (Notification Banner) ---
@@ -362,20 +460,15 @@
                 }, 2500);
             });
 
-            // --- 7. Prompt for Name (Delayed) ---
-            setTimeout(() => {
-                let visitorName = prompt("Welcome! Please enter your name:");
-                let welcomeElement = document.getElementById("welcome-message");
-                
-                if (visitorName && visitorName.trim() !== "") {
-                    welcomeElement.textContent = `Welcome to my portfolio, ${visitorName.trim()}!`;
-                } else {
-                    welcomeElement.textContent = "Welcome to Nathanial's Portfolio!";
-                }
-            }, 100);
+            // --- 7. Welcome Modal Logic ---
+            const welcomeModal = document.getElementById('welcome-modal');
+            const closeModalBtn = document.getElementById('close-modal-btn');
+
+            closeModalBtn.addEventListener('click', () => {
+                welcomeModal.style.display = 'none';
+            });
 
         });
     </script>
-
 </body>
 </html>
