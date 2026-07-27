@@ -93,6 +93,27 @@
         .project-gallery img:hover {
             transform: scale(1.05);
         }
+
+        /* Dynamic Project Card Styles */
+        .project-card {
+            width: 200px;
+            text-align: center;
+        }
+        .project-card h3 {
+            font-size: 1.1rem;
+            margin: 10px 0 5px 0;
+            color: inherit;
+        }
+        .project-card p {
+            font-size: 0.9rem;
+            color: inherit;
+            opacity: 0.8;
+        }
+        .project-card a {
+            text-decoration: none;
+            color: inherit;
+        }
+
         .form-group {
             margin-bottom: 15px;
         }
@@ -170,7 +191,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.6); /* Slight transparency */
+            background-color: rgba(0, 0, 0, 0.6);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -295,11 +316,8 @@
             <h2>My Projects</h2>
             <p>Here are a few of the GitHub projects I have been working on recently:</p>
             
-            <div class="project-gallery">
-                <a href="https://github.com/NathanialStory/Main-Street-Hardware-DB" target="_blank" title="Main Street Hardware Database">
-                    <img src="https://via.placeholder.com/200?text=SQL+Database" alt="Main Street Hardware SQL Database ER Diagram">
-                </a>
-            </div>
+            <!-- This container will now be populated dynamically via JavaScript -->
+            <div class="project-gallery"></div>
         </section>
 
         <!-- Contact Section -->
@@ -339,8 +357,71 @@
 
     <script> 
         document.addEventListener('DOMContentLoaded', () => {
+
+            // --- 1. Dynamic Project Rendering via Session Storage ---
             
-            // --- 1. Loop to display skills ---
+            const myProjects = [
+                {
+                    title: "Main Street Hardware Database",
+                    summary: "A comprehensive SQL database designed for a local hardware store to manage inventory and sales.",
+                    imageUrl: "https://via.placeholder.com/200?text=SQL+Database",
+                    repoLink: "https://github.com/NathanialStory/Main-Street-Hardware-DB"
+                },
+                {
+                    title: "Task Manager App",
+                    summary: "An interactive task manager application that utilizes local storage for data persistence.",
+                    imageUrl: "https://via.placeholder.com/200?text=Task+Manager",
+                    repoLink: "https://github.com/NathanialStory/Task-Manager"
+                },
+                {
+                    title: "Weather Dashboard",
+                    summary: "A dynamic web app that fetches and displays real-time weather data using a public API.",
+                    imageUrl: "https://via.placeholder.com/200?text=Weather+App",
+                    repoLink: "https://github.com/NathanialStory/Weather-Dashboard"
+                }
+            ];
+
+            let storedProjects;
+            
+            if (!sessionStorage.getItem('portfolioProjects')) {
+                sessionStorage.setItem('portfolioProjects', JSON.stringify(myProjects));
+                storedProjects = myProjects; 
+            } else {
+                storedProjects = JSON.parse(sessionStorage.getItem('portfolioProjects'));
+            }
+
+            const projectGallery = document.querySelector('.project-gallery');
+            projectGallery.innerHTML = ''; // Clear existing static html
+
+            storedProjects.forEach(project => {
+                const projectCard = document.createElement('div');
+                projectCard.className = 'project-card';
+                
+                const link = document.createElement('a');
+                link.href = project.repoLink;
+                link.target = "_blank";
+                link.title = project.title;
+                
+                const img = document.createElement('img');
+                img.src = project.imageUrl;
+                img.alt = project.title;
+                img.style.width = "100%";
+                
+                const title = document.createElement('h3');
+                title.textContent = project.title;
+                
+                const summary = document.createElement('p');
+                summary.textContent = project.summary;
+                
+                link.appendChild(img);
+                projectCard.appendChild(link);
+                projectCard.appendChild(title);
+                projectCard.appendChild(summary);
+                
+                projectGallery.appendChild(projectCard);
+            });
+            
+            // --- 2. Loop to display skills ---
             const mySkills = ["HTML", "CSS", "JavaScript", "C#", "SQL", "Git"];
             const skillsListElement = document.getElementById('skills-list');
             
@@ -350,12 +431,12 @@
                 skillsListElement.appendChild(li);
             });
 
-            // --- 2. Featured Content Logic ---
-            const projectLinks = document.querySelectorAll('.project-gallery a');
+            // --- 3. Featured Content Logic ---
+            // Note: Since projectGallery links are now built dynamically, we check the array length instead.
             const uniDiv = document.getElementById('uni-resources');
             const personalDiv = document.getElementById('personal-projects');
 
-            if (projectLinks.length < 3) {
+            if (storedProjects.length < 3) {
                 uniDiv.style.display = 'block';
                 personalDiv.style.display = 'block';
             } else {
@@ -363,10 +444,9 @@
                 personalDiv.style.display = 'block';
             }
 
-            // --- 3. Dark Mode Slider w/ LocalStorage Persistence ---
+            // --- 4. Dark Mode Slider w/ LocalStorage Persistence ---
             const darkSlider = document.getElementById('dark-mode-slider');
             
-            // Check for stored preference on load
             if (localStorage.getItem('darkMode') === 'enabled') {
                 document.body.classList.add('dark-mode');
                 darkSlider.checked = true;
@@ -382,7 +462,7 @@
                 }
             });
 
-            // --- 4. Modify Existing Elements ---
+            // --- 5. Modify Existing Elements ---
             const aboutHeading = document.querySelector('#about h2');
             aboutHeading.textContent = "About Me & My Journey";
             aboutHeading.style.color = "#e8491d";
@@ -390,7 +470,6 @@
             const projectsSection = document.getElementById('projects');
             projectsSection.style.borderLeft = "5px solid #e8491d";
 
-            // Dynamic Paragraph Creation
             const newProjectIntro = document.createElement('p');
             newProjectIntro.textContent = "new projects in the works";
             newProjectIntro.style.fontWeight = "bold";
@@ -401,7 +480,7 @@
             newProjectIntro.style.marginTop = "20px";
             projectsSection.appendChild(newProjectIntro);
 
-            // --- 5. Dynamic Element Creation (Notification Banner) ---
+            // --- 6. Dynamic Element Creation (Notification Banner) ---
             setTimeout(() => {
                 const notification = document.createElement('div');
                 notification.textContent = "👋 Thanks for checking out my portfolio! New projects added recently.";
@@ -418,7 +497,7 @@
                 }, 5000);
             }, 1500);
 
-            // --- 6. Timed Form Confirmation ---
+            // --- 7. Timed Form Confirmation ---
             const submitButton = document.getElementById('submit-btn');
             const contactForm = document.getElementById('portfolio-form');
             
@@ -428,7 +507,6 @@
             contactForm.appendChild(formStatusMsg); 
 
             submitButton.addEventListener('click', (event) => {
-                // Ensure form validation passes before running custom logic
                 if(!contactForm.checkValidity()) {
                     contactForm.reportValidity();
                     return;
@@ -460,7 +538,7 @@
                 }, 2500);
             });
 
-            // --- 7. Welcome Modal Logic ---
+            // --- 8. Welcome Modal Logic ---
             const welcomeModal = document.getElementById('welcome-modal');
             const closeModalBtn = document.getElementById('close-modal-btn');
 
